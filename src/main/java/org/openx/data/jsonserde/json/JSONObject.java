@@ -162,7 +162,7 @@ public class JSONObject {
         this();
         for (int i = 0; i < names.length; i += 1) {
             try {
-                putOnce(names[i], jo.opt(names[i]));
+                putOnce(names[i].toLowerCase(), jo.opt(names[i]));
             } catch (Exception ignore) {
             }
         }
@@ -192,7 +192,7 @@ public class JSONObject {
                 return;
             default:
                 x.back();
-                key = x.nextValue().toString();
+                key = x.nextValue().toString().toLowerCase();
             }
 
 // The key is followed by ':'. We will also tolerate '=' or '=>'.
@@ -288,7 +288,7 @@ public class JSONObject {
         this();
         Class c = object.getClass();
         for (int i = 0; i < names.length; i += 1) {
-            String name = names[i];
+            String name = names[i].toLowerCase();
             try {
                 putOpt(name, c.getField(name).get(object));
             } catch (Exception ignore) {
@@ -341,11 +341,11 @@ public class JSONObject {
                     JSONObject nextTarget = target.optJSONObject(segment);
                     if (nextTarget == null) {
                         nextTarget = new JSONObject();
-                        target.put(segment, nextTarget);
+                        target.put(segment.toLowerCase(), nextTarget);
                     }
                     target = nextTarget;
                 }
-                target.put(path[last], bundle.getString((String)key));
+                target.put(path[last].toLowerCase(), bundle.getString((String)key));
             }
         }
     }
@@ -374,12 +374,12 @@ public class JSONObject {
         testValidity(value);
         Object object = opt(key);
         if (object == null) {
-            put(key, value instanceof JSONArray ?
+            put(key.toLowerCase(), value instanceof JSONArray ?
                     new JSONArray().put(value) : value);
         } else if (object instanceof JSONArray) {
             ((JSONArray)object).put(value);
         } else {
-            put(key, new JSONArray().put(object).put(value));
+            put(key.toLowerCase(), new JSONArray().put(object).put(value));
         }
         return this;
     }
@@ -400,9 +400,9 @@ public class JSONObject {
         testValidity(value);
         Object object = opt(key);
         if (object == null) {
-            put(key, new JSONArray().put(value));
+            put(key.toLowerCase(), new JSONArray().put(value));
         } else if (object instanceof JSONArray) {
-            put(key, ((JSONArray)object).put(value));
+            put(key.toLowerCase(), ((JSONArray)object).put(value));
         } else {
             throw new JSONException("JSONObject[" + key +
                     "] is not a JSONArray.");
